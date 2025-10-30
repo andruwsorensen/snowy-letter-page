@@ -55,8 +55,8 @@ export default function NewLetterPage() {
             <div className="bg-card rounded-lg shadow-2xl border-2 border-border overflow-hidden">
               <div className="p-6 md:p-10 space-y-6">
                 <div>
-                  <label htmlFor="key" className="block text-sm font-medium text-foreground mb-2">
-                    Enter Santa's Secret Key
+                  <label htmlFor="key" className="block text-sm font-medium text-black mb-2">
+                    Enter Santa's Secret Password
                   </label>
                   <input
                     type="password"
@@ -66,7 +66,7 @@ export default function NewLetterPage() {
                       setKey(e.target.value)
                       setError("")
                     }}
-                    placeholder="ho ho ho..."
+                    placeholder="Santa's Secret Password"
                     className="w-full px-4 py-3 bg-white border-2 border-border rounded-lg text-black placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent font-sans"
                   />
                   {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
