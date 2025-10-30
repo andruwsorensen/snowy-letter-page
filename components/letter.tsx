@@ -21,10 +21,10 @@ export default function Letter() {
               <div className="bg-card rounded-lg shadow-2xl p-8 md:p-12 border-2 border-border">
                 <div className="aspect-[3/2] flex items-center justify-center">
                   <div className="text-center">
-                    <p className="text-muted-foreground text-sm md:text-base mb-4 font-serif">
+                    <p className="text-muted-foreground text-sm md:text-base mb-4 font-sans">
                       {"You have received a letter"}
                     </p>
-                    <p className="text-xs text-muted-foreground/70 font-serif italic">{"Click to open"}</p>
+                    <p className="text-xs text-muted-foreground/70 font-sans italic">{"Click to open"}</p>
                   </div>
                 </div>
               </div>
@@ -56,7 +56,7 @@ export default function Letter() {
               {/* Letter Header */}
               <div className="bg-secondary/50 p-6 md:p-8 border-b border-border">
                 <div className="flex items-center justify-between">
-                  <h1 className="text-2xl md:text-3xl font-serif text-card-foreground">{"A Letter For You"}</h1>
+                  <h1 className="text-2xl md:text-3xl font-sans text-card-foreground">{"A Letter For You"}</h1>
                   <button
                     onClick={() => setIsOpen(false)}
                     className="text-muted-foreground hover:text-foreground transition-colors"
@@ -81,7 +81,7 @@ export default function Letter() {
 
               {/* Letter Content - Scrollable */}
               <div className="p-6 md:p-10 max-h-[60vh] overflow-y-auto">
-                <div className="prose prose-lg max-w-none font-serif text-card-foreground">
+                <div className="prose prose-lg max-w-none font-sans text-card-foreground">
                   <p className="text-sm text-muted-foreground mb-6">{"December 25th, 2025"}</p>
 
                   <p className="mb-4 leading-relaxed">{"Dear Friend,"}</p>

@@ -16,43 +16,63 @@ export function useLetters() {
   const [letters, setLetters] = useState<Letter[]>([])
   const [isLoaded, setIsLoaded] = useState(false)
 
-  // Load letters from localStorage on mount
+  // Load letters from JSON file
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored)
-        setLetters(parsed)
-      } catch (error) {
-        console.error("[v0] Failed to parse letters from storage:", error)
-      }
-    }
-    setIsLoaded(true)
+    fetch('/letters.json')
+      .then(response => response.json())
+      .then(data => {
+        setLetters(data.letters);
+        setIsLoaded(true);
+      })
+      .catch(error => {
+        console.error('Error loading letters:', error);
+        setIsLoaded(true);
+      });
   }, [])
 
-  // Save letters to localStorage whenever they change
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(letters))
-    }
-  }, [letters, isLoaded])
+  const addLetter = async (letter: Omit<Letter, "id" | "createdAt">) => {
+    try {
+      const response = await fetch('/api/letters', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ letter }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to save letter');
+      }
 
-  const addLetter = (letter: Omit<Letter, "id" | "createdAt">) => {
-    const newLetter: Letter = {
-      ...letter,
-      id: Date.now().toString(),
-      createdAt: Date.now(),
+      const { letter: newLetter } = await response.json();
+      setLetters((prev) => [newLetter, ...prev]);
+      return newLetter;
+    } catch (error) {
+      console.error('Error adding letter:', error);
+      throw error;
     }
-    setLetters((prev) => [newLetter, ...prev])
-    return newLetter
   }
 
   const getLetter = (id: string) => {
     return letters.find((letter) => letter.id === id)
   }
 
-  const deleteLetter = (id: string) => {
-    setLetters((prev) => prev.filter((letter) => letter.id !== id))
+  const deleteLetter = async (id: string, authKey: string) => {
+    try {
+      const response = await fetch(`/api/letters?id=${id}&key=${authKey}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete letter');
+      }
+
+      setLetters((prev) => prev.filter(letter => letter.id !== id));
+      return true;
+    } catch (error) {
+      console.error('Error deleting letter:', error);
+      throw error;
+    }
   }
 
   return {

@@ -20,8 +20,7 @@ export default function HomePage() {
       <div className="relative z-10 container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-serif text-foreground mb-4">My Letters</h1>
-          <p className="text-muted-foreground text-lg">A collection of cherished correspondence</p>
+          <h1 className="text-4xl md:text-5xl font-sans text-foreground mb-4">Christmas Elf Jobs</h1>
         </div>
 
         {!isLoaded ? (
@@ -42,7 +41,7 @@ export default function HomePage() {
                   d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                 />
               </svg>
-              <h2 className="text-xl font-serif text-card-foreground mb-2">No letters yet</h2>
+              <h2 className="text-xl font-sans text-card-foreground mb-2">No letters yet</h2>
               <p className="text-muted-foreground mb-6">Start writing your first letter to begin your collection</p>
               <Link href="/letter/new">
                 <button className="px-6 py-3 bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors font-medium shadow-lg">
@@ -62,7 +61,7 @@ export default function HomePage() {
                     <div className="relative">
                       {/* Letter Card */}
                       <div className="bg-card rounded-lg shadow-xl p-6 border-2 border-border h-64 flex flex-col">
-                        <h2 className="text-xl font-serif text-card-foreground mb-2">{letter.title}</h2>
+                        <h2 className="text-xl font-sans text-card-foreground mb-2">{letter.title}</h2>
                         <p className="text-sm text-muted-foreground mb-4">{letter.date}</p>
                         <p className="text-card-foreground/80 leading-relaxed flex-1 line-clamp-4">{preview}</p>
                         <div className="flex items-center text-sm text-muted-foreground mt-4">

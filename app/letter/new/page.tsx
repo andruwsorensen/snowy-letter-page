@@ -6,10 +6,14 @@ import { useState } from "react"
 import { Snowfall } from "@/components/snowfall"
 import { useRouter } from "next/navigation"
 import { useLetters } from "@/hooks/use-letters"
+import { useAuth } from "@/hooks/use-auth"
 
 export default function NewLetterPage() {
   const router = useRouter()
   const { addLetter } = useLetters()
+  const { isAdmin, login } = useAuth()
+  const [key, setKey] = useState("")
+  const [error, setError] = useState("")
 
   const [title, setTitle] = useState("")
   const [date, setDate] = useState(
@@ -25,7 +29,7 @@ export default function NewLetterPage() {
     e.preventDefault()
 
     const newLetter = addLetter({ title, date, content })
-    console.log("[v0] Created letter:", newLetter)
+    console.log("Created letter:", newLetter)
 
     // Navigate back to home
     router.push("/")
@@ -43,11 +47,55 @@ export default function NewLetterPage() {
         <div className="max-w-3xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-serif text-foreground mb-4">Compose a Letter</h1>
-            <p className="text-muted-foreground text-lg">Write your thoughts and memories</p>
+            <h1 className="text-4xl md:text-5xl font-sans text-foreground mb-4">Compose a Letter</h1>
           </div>
 
-          {/* Form Card */}
+          {!isAdmin ? (
+            /* Auth Form Card */
+            <div className="bg-card rounded-lg shadow-2xl border-2 border-border overflow-hidden">
+              <div className="p-6 md:p-10 space-y-6">
+                <div>
+                  <label htmlFor="key" className="block text-sm font-medium text-foreground mb-2">
+                    Enter Santa's Secret Key
+                  </label>
+                  <input
+                    type="password"
+                    id="key"
+                    value={key}
+                    onChange={(e) => {
+                      setKey(e.target.value)
+                      setError("")
+                    }}
+                    placeholder="ho ho ho..."
+                    className="w-full px-4 py-3 bg-white border-2 border-border rounded-lg text-black placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent font-sans"
+                  />
+                  {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
+                </div>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (!login(key)) {
+                      setError("Invalid key! Are you really Santa?")
+                    }
+                  }}
+                  className="w-full px-6 py-3 bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors font-medium shadow-lg"
+                >
+                  Unlock Letter Writing
+                </button>
+              </div>
+            </div>
+          ) : (
+            /* Form Card */
+            <div className="bg-card rounded-lg shadow-2xl border-2 border-border overflow-hidden hidden">
+              <form onSubmit={handleSubmit}>
+                <div className="p-6 md:p-10 space-y-6">
+                  {/* Form fields */}
+                </div>
+              </form>
+            </div>
+          )}
+          <div>
+          </div>
           <div className="bg-card rounded-lg shadow-2xl border-2 border-border overflow-hidden">
             <form onSubmit={handleSubmit}>
               {/* Form Header */}
@@ -66,7 +114,7 @@ export default function NewLetterPage() {
                   >
                     <path d="M3 6h18M3 12h18M3 18h18" />
                   </svg>
-                  <h2 className="text-xl font-serif text-card-foreground">New Letter</h2>
+                  <h2 className="text-xl font-sans text-card-foreground">New Letter</h2>
                 </div>
               </div>
 
@@ -82,14 +130,14 @@ export default function NewLetterPage() {
                     id="title"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="A Letter For You"
+                    placeholder="Title"
                     required
-                    className="w-full px-4 py-3 bg-background border-2 border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent font-serif text-lg"
+                    className="w-full px-4 py-3 bg-white border-2 border-border rounded-lg text-black placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent font-sans text-lg"
                   />
                 </div>
 
                 {/* Date Field */}
-                <div>
+                {/* <div>
                   <label htmlFor="date" className="block text-sm font-medium text-card-foreground mb-2">
                     Date
                   </label>
@@ -100,9 +148,9 @@ export default function NewLetterPage() {
                     onChange={(e) => setDate(e.target.value)}
                     placeholder="December 25th, 2025"
                     required
-                    className="w-full px-4 py-3 bg-background border-2 border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+                    className="w-full px-4 py-3 bg-white border-2 border-border rounded-lg text-black placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                   />
-                </div>
+                </div> */}
 
                 {/* Content Field */}
                 <div>
@@ -113,10 +161,10 @@ export default function NewLetterPage() {
                     id="content"
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
-                    placeholder="Dear Friend,&#10;&#10;Write your letter here..."
+                    placeholder="Dear Elf..."
                     required
                     rows={12}
-                    className="w-full px-4 py-3 bg-background border-2 border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent font-serif leading-relaxed resize-none"
+                    className="w-full px-4 py-3 bg-white border-2 border-border rounded-lg text-black placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent font-sans leading-relaxed resize-none"
                   />
                 </div>
 
@@ -129,7 +177,7 @@ export default function NewLetterPage() {
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="px-6 py-3 bg-background border-2 border-border text-card-foreground rounded-lg hover:bg-muted transition-colors font-medium"
+                  className="px-6 py-3 bg-background border-2 border-border text-white hover:text-white rounded-lg hover:bg-background/90 transition-colors font-medium"
                 >
                   Cancel
                 </button>

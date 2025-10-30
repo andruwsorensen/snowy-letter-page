@@ -22,7 +22,7 @@ export function Snowfall() {
         left: Math.random() * 100,
         animationDuration: Math.random() * 5 + 5,
         opacity: Math.random() * 0.6 + 0.4,
-        size: Math.random() * 13 + 16,
+        size: Math.random() * 20 + 25,
         delay: Math.random() * 5,
       })
     }
