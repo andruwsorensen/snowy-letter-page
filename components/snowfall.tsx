@@ -39,13 +39,30 @@ export function Snowfall() {
             left: `${flake.left}%`,
             animationDuration: `${flake.animationDuration}s`,
             animationDelay: `${flake.delay}s`,
-            opacity: flake.opacity,
+            opacity: 0,
             fontSize: `${flake.size}px`,
+            animation: `snowfall ${flake.animationDuration}s linear ${flake.delay}s infinite`,
           }}
         >
           {"❄"}
         </div>
       ))}
+
+      <style jsx>{`
+        @keyframes snowfall {
+          0% {
+            transform: translateY(-10vh);
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(110vh);
+            opacity: 1;
+          }
+        }
+      `}</style>
     </div>
   )
 }
