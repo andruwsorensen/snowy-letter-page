@@ -62,7 +62,7 @@ export default function HomePage() {
                       {/* Letter Card */}
                       <div className="bg-card rounded-lg shadow-xl p-6 border-2 border-border h-64 flex flex-col">
                         <h2 className="text-xl font-sans text-card-foreground mb-2">{letter.title}</h2>
-                        <p className="text-sm text-muted-foreground mb-4">{letter.date}</p>
+                        {/* <p className="text-sm text-muted-foreground mb-4">{letter.date}</p> */}
                         <p className="text-card-foreground/80 leading-relaxed flex-1 line-clamp-4">{preview}</p>
                         <div className="flex items-center text-sm text-muted-foreground mt-4">
                           <span>Click to open</span>
