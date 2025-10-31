@@ -77,10 +77,14 @@ export function useLetters() {
     try {
       const response = await fetch(`/api/letters?id=${id}&key=${authKey}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete letter');
+        const errorText = await response.text();
+        throw new Error(`Failed to delete letter: ${errorText}`);
       }
 
       // Refetch all letters to ensure we have the latest state
