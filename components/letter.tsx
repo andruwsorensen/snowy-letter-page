@@ -53,7 +53,7 @@ export default function Letter({ title, date, content }: LetterProps) {
             <img 
               src="/static-envelope.png" 
               alt="Envelope"
-              className={`w-full max-w-3xl mx-auto md:mt-[-300] mt-[-200] ${isAnimating ? 'hidden' : 'block'} custom-scrollbar`}
+              className={`w-full max-w-2xl mx-auto md:mt-[-300] mt-[-200] ${isAnimating ? 'hidden' : 'block'} custom-scrollbar`}
             />
             
             {/* Animated Envelope Image (APNG) */}
@@ -61,7 +61,7 @@ export default function Letter({ title, date, content }: LetterProps) {
               id="animated-envelope"
               src="/animated-envelope.png"
               alt="Envelope opening"
-              className={`w-full max-w-3xl mx-auto md:mt-[-300] mt-[-200] ${!isAnimating ? 'hidden' : 'block'}`}
+              className={`w-full max-w-2xl mx-auto md:mt-[-300] mt-[-200] ${!isAnimating ? 'hidden' : 'block'}`}
             />
           </div>
         </div>
