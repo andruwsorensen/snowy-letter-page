@@ -6,7 +6,7 @@ const STORE_ID = process.env.BLOB_READ_WRITE_TOKEN;
 
 // Helper function to get the latest letters blob
 async function getLatestLettersBlob() {
-  const result = await list({ prefix: 'letters' });
+  const result = await list({ prefix: 'letters_' });
   // Sort by uploadedAt in descending order to get the most recent
   const blobs = result.blobs.sort((a, b) => 
     new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
@@ -17,14 +17,19 @@ async function getLatestLettersBlob() {
 // This is a simple API route that handles both GET and POST requests
 export async function GET() {
   try {
+    console.log('Fetching letters...');
     const lettersBlob = await getLatestLettersBlob();
+    console.log('Found blob:', lettersBlob);
     
     if (!lettersBlob?.url) {
+      console.log('No letters blob found');
       return NextResponse.json({ letters: [] });
     }
 
+    console.log('Fetching from URL:', lettersBlob.url);
     const response = await fetch(lettersBlob.url);
     const data = await response.json();
+    console.log('Fetched data:', data);
     return NextResponse.json(data);
   } catch (error) {
     console.error('Failed to load letters:', error);

@@ -197,7 +197,8 @@ export default function LetterPage() {
               {/* Letter Content - Scrollable */}
               <div className="p-6 md:p-10 max-h-[60vh] overflow-y-auto">
                 <div className="prose prose-lg max-w-none font-sans text-card-foreground">
-                  {/* <p className="text-sm text-muted-foreground mb-6">{letter.date}</p> */}
+                  <p className="text-sm text-muted-foreground mb-6">{letter.date}</p>
+                  <div className="whitespace-pre-wrap">{letter.content}</div>
 
                   <div className="whitespace-pre-wrap leading-relaxed">{letter.content}</div>
                 </div>

@@ -3,7 +3,13 @@
 import { useState } from "react"
 import { Snowfall } from "./snowfall"
 
-export default function Letter() {
+interface LetterProps {
+  title: string
+  date: string
+  content: string
+}
+
+export default function Letter({ title, date, content }: LetterProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -56,7 +62,7 @@ export default function Letter() {
               {/* Letter Header */}
               <div className="bg-secondary/50 p-6 md:p-8 border-b border-border">
                 <div className="flex items-center justify-between">
-                  <h1 className="text-2xl md:text-3xl font-sans text-card-foreground">{"A Letter For You"}</h1>
+                  <h1 className="text-2xl md:text-3xl font-sans text-card-foreground">{title}</h1>
                   <button
                     onClick={() => setIsOpen(false)}
                     className="text-muted-foreground hover:text-foreground transition-colors"
@@ -82,43 +88,8 @@ export default function Letter() {
               {/* Letter Content - Scrollable */}
               <div className="p-6 md:p-10 max-h-[60vh] overflow-y-auto">
                 <div className="prose prose-lg max-w-none font-sans text-card-foreground">
-                  <p className="text-sm text-muted-foreground mb-6">{"December 25th, 2025"}</p>
-
-                  <p className="mb-4 leading-relaxed">{"Dear Friend,"}</p>
-
-                  <p className="mb-4 leading-relaxed">
-                    {
-                      "As snowflakes dance outside my window, I find myself reflecting on the warmth of cherished memories and the joy of meaningful connections. This letter comes to you with heartfelt wishes for peace, happiness, and wonder."
-                    }
-                  </p>
-
-                  <p className="mb-4 leading-relaxed">
-                    {
-                      "In this season of reflection, I am reminded of how precious each moment truly is. The gentle fall of snow, the quiet stillness of winter nights, and the comfort of knowing that somewhere, someone is thinking of you with fondness and care."
-                    }
-                  </p>
-
-                  <p className="mb-4 leading-relaxed">
-                    {
-                      "May your days be filled with the magic of simple pleasures—a warm cup of tea, the laughter of loved ones, the beauty of a winter landscape, and the promise of new beginnings that each snowfall brings."
-                    }
-                  </p>
-
-                  <p className="mb-4 leading-relaxed">
-                    {
-                      "I hope this letter finds you well and brings a smile to your face. Know that you are thought of with great affection, and that the bond we share transcends distance and time, much like the eternal beauty of falling snow."
-                    }
-                  </p>
-
-                  <p className="mb-4 leading-relaxed">
-                    {
-                      "As you read these words, imagine the soft glow of candlelight, the gentle whisper of winter wind, and the knowledge that you are valued beyond measure. May the coming days bring you joy, peace, and countless reasons to celebrate."
-                    }
-                  </p>
-
-                  <p className="mb-4 leading-relaxed">{"With warmest regards and fondest wishes,"}</p>
-
-                  <p className="italic text-muted-foreground mt-8">{"Your Friend"}</p>
+                  <p className="text-sm text-muted-foreground mb-6">{date}</p>
+                  <div className="whitespace-pre-wrap">{content}</div>
                 </div>
               </div>
             </div>
