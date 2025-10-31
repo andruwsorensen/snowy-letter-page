@@ -16,18 +16,21 @@ export function useLetters() {
   const [letters, setLetters] = useState<Letter[]>([])
   const [isLoaded, setIsLoaded] = useState(false)
 
+  const fetchLetters = async () => {
+    try {
+      const response = await fetch('/api/letters');
+      const data = await response.json();
+      setLetters(data.letters || []);
+      setIsLoaded(true);
+    } catch (error) {
+      console.error('Error loading letters:', error);
+      setIsLoaded(true);
+    }
+  };
+
   // Load letters from API
   useEffect(() => {
-    fetch('/api/letters')
-      .then(response => response.json())
-      .then(data => {
-        setLetters(data.letters || []);
-        setIsLoaded(true);
-      })
-      .catch(error => {
-        console.error('Error loading letters:', error);
-        setIsLoaded(true);
-      });
+    fetchLetters();
   }, [])
 
   const addLetter = async (letter: Omit<Letter, "id" | "createdAt">) => {
@@ -53,7 +56,8 @@ export function useLetters() {
 
       const result = await response.json();
       if (result.success && result.letter) {
-        setLetters((prev) => [result.letter, ...prev]);
+        // Refetch all letters to ensure we have the latest state
+        await fetchLetters();
         return result.letter;
       } else {
         console.error('Invalid server response:', result);
@@ -79,7 +83,8 @@ export function useLetters() {
         throw new Error('Failed to delete letter');
       }
 
-      setLetters((prev) => prev.filter(letter => letter.id !== id));
+      // Refetch all letters to ensure we have the latest state
+      await fetchLetters();
       return true;
     } catch (error) {
       console.error('Error deleting letter:', error);
