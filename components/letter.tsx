@@ -100,9 +100,9 @@ export default function Letter({ title, date, content }: LetterProps) {
                 </button>
                 
                 <div className="prose prose-lg max-w-none font-serif text-stone-800">
-                  <h1 className="text-3xl md:text-4xl mb-2 font-semibold text-stone-800">{title}</h1>
+                  <h1 className="text-3xl md:text-3xl mb-2 font-semibold text-stone-800">{title}</h1>
                   {/* <p className="text-sm text-stone-600 mb-8 font-serif italic">{date}</p> */}
-                  <div className="whitespace-pre-wrap leading-relaxed">{content}</div>
+                  <div className="text-xl whitespace-pre-wrap leading-relaxed">{content}</div>
                 </div>
               </div>
             </div>
