@@ -62,41 +62,42 @@ export default function Letter({ title, date, content }: LetterProps) {
         </div>
         {isOpen && (
           <div className="absolute w-full max-w-2xl left-1/2 -translate-x-1/2 top-1/2">
-            <div className="animate-slide-up bg-card rounded-lg shadow-2xl border-2 border-border overflow-hidden">
-              {/* Letter Header */}
-              <div className="bg-secondary/50 p-6 md:p-8 border-b border-border">
-                <div className="flex items-center justify-between">
-                  <h1 className="text-2xl md:text-3xl font-sans text-card-foreground">{title}</h1>
-                  <button
-                    onClick={() => {
-                      setIsOpen(false)
-                      setIsAnimating(false)
-                    }}
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                    aria-label="Close letter"
+            <div className="animate-slide-up overflow-hidden rounded-lg shadow-2xl relative">
+              {/* Aged Paper Background */}
+              <div className="absolute inset-0 bg-[#FEECE0] opacity-95"></div>
+              
+              {/* Paper Texture Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-black/10"></div>
+              
+              {/* Letter Content with Close Button */}
+              <div className="relative p-8 md:p-12 max-h-[70vh] overflow-y-auto">
+                <button
+                  onClick={() => {
+                    setIsOpen(false)
+                    setIsAnimating(false)
+                  }}
+                  className="absolute top-4 right-4 text-stone-600 hover:text-stone-800 transition-colors"
+                  aria-label="Close letter"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <line x1="18" y1="6" x2="6" y2="18" />
-                      <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-
-              {/* Letter Content - Scrollable */}
-              <div className="p-6 md:p-10 max-h-[60vh] overflow-y-auto">
-                <div className="prose prose-lg max-w-none font-sans text-card-foreground">
-                  <p className="text-sm text-muted-foreground mb-6">{date}</p>
-                  <div className="whitespace-pre-wrap">{content}</div>
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+                
+                <div className="prose prose-lg max-w-none font-serif text-stone-800">
+                  <h1 className="text-3xl md:text-4xl mb-2 font-semibold text-stone-800">{title}</h1>
+                  {/* <p className="text-sm text-stone-600 mb-8 font-serif italic">{date}</p> */}
+                  <div className="whitespace-pre-wrap leading-relaxed">{content}</div>
                 </div>
               </div>
             </div>
