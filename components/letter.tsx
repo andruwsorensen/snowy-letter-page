@@ -53,7 +53,7 @@ export default function Letter({ title, date, content }: LetterProps) {
             <img 
               src="/static-envelope.png" 
               alt="Envelope"
-              className={`w-full max-w-3xl mx-auto ${isAnimating ? 'hidden' : 'block'}`}
+              className={`w-full max-w-3xl mx-auto md:mt-[-300] mt-[-200] ${isAnimating ? 'hidden' : 'block'} custom-scrollbar`}
             />
             
             {/* Animated Envelope Image (APNG) */}
@@ -61,12 +61,12 @@ export default function Letter({ title, date, content }: LetterProps) {
               id="animated-envelope"
               src="/animated-envelope.png"
               alt="Envelope opening"
-              className={`w-full max-w-3xl mx-auto ${!isAnimating ? 'hidden' : 'block'}`}
+              className={`w-full max-w-3xl mx-auto md:mt-[-300] mt-[-200] ${!isAnimating ? 'hidden' : 'block'}`}
             />
           </div>
         </div>
         {isOpen && (
-          <div className="absolute w-[calc(100%-2rem)] sm:w-full max-w-2xl left-1/2 -translate-x-1/2 top-1/2">
+          <div className="absolute w-[calc(100%-6rem)] sm:w-full max-w-2xl left-1/2 -translate-x-1/2 top-1/2">
             <div className="animate-slide-up overflow-hidden rounded-lg shadow-2xl relative">
               {/* Aged Paper Background */}
               <div className="absolute inset-0 bg-[#FEECE0] opacity-95"></div>
