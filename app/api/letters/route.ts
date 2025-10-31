@@ -2,16 +2,30 @@ import { NextResponse } from 'next/server';
 import { put, list } from '@vercel/blob';
 import { Letter } from '@/hooks/use-letters';
 
+interface LettersData {
+  letters: Letter[];
+}
+
 const STORE_ID = process.env.BLOB_READ_WRITE_TOKEN;
 
 // Helper function to get the latest letters blob
 async function getLatestLettersBlob() {
-  const result = await list({ prefix: 'letters_' });
-  // Sort by uploadedAt in descending order to get the most recent
-  const blobs = result.blobs.sort((a, b) => 
-    new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
-  );
-  return blobs[0];
+  try {
+    const result = await list({ prefix: 'letters_' });
+    if (!result?.blobs?.length) {
+      console.log('No blobs found in storage');
+      return null;
+    }
+    
+    // Sort by uploadedAt in descending order to get the most recent
+    const blobs = result.blobs.sort((a, b) => 
+      new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
+    );
+    return blobs[0];
+  } catch (error) {
+    console.error('Error listing blobs:', error);
+    return null;
+  }
 }
 
 // This is a simple API route that handles both GET and POST requests
@@ -19,7 +33,6 @@ export async function GET() {
   try {
     console.log('Fetching letters...');
     const lettersBlob = await getLatestLettersBlob();
-    console.log('Found blob:', lettersBlob);
     
     if (!lettersBlob?.url) {
       console.log('No letters blob found');
@@ -28,12 +41,26 @@ export async function GET() {
 
     console.log('Fetching from URL:', lettersBlob.url);
     const response = await fetch(lettersBlob.url);
-    const data = await response.json();
-    console.log('Fetched data:', data);
+    
+    if (!response.ok) {
+      console.error('Blob fetch failed:', response.status, response.statusText);
+      return NextResponse.json({ letters: [] }, { status: 500 });
+    }
+
+    const text = await response.text();
+    console.log('Received response:', text.substring(0, 200));
+    
+    const data = JSON.parse(text) as LettersData;
+    if (!data || !Array.isArray(data.letters)) {
+      console.error('Invalid data structure received');
+      return NextResponse.json({ letters: [] }, { status: 500 });
+    }
+    
+    console.log('Successfully parsed data:', data);
     return NextResponse.json(data);
   } catch (error) {
     console.error('Failed to load letters:', error);
-    return NextResponse.json({ error: 'Failed to load letters' }, { status: 500 });
+    return NextResponse.json({ letters: [] }, { status: 500 });
   }
 }
 
@@ -48,26 +75,32 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
-    if (!id) {
-      return NextResponse.json({ error: 'Letter ID is required' }, { status: 400 });
-    }
-    
+    // Get the current letters
     const lettersBlob = await getLatestLettersBlob();
-    
-    let data: { letters: Letter[] } = { letters: [] };
-    if (lettersBlob?.url) {
-      const response = await fetch(lettersBlob.url);
-      data = await response.json();
+    if (!lettersBlob?.url) {
+      return NextResponse.json({ error: 'No letters found' }, { status: 404 });
     }
 
-    data.letters = data.letters.filter(letter => letter.id !== id);
-    
+    const response = await fetch(lettersBlob.url);
+    const data = await response.json() as LettersData;
+
+    // Find and remove the letter
+    const letterIndex = data.letters.findIndex((letter) => letter.id === id);
+    if (letterIndex === -1) {
+      return NextResponse.json({ error: 'Letter not found' }, { status: 404 });
+    }
+
+    // Remove the letter
+    data.letters.splice(letterIndex, 1);
+
+    // Save the updated letters
     const timestamp = Date.now();
     await put(`letters_${timestamp}.json`, JSON.stringify(data), {
       access: 'public',
       contentType: 'application/json',
       token: STORE_ID
-    });    
+    });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Failed to delete letter:', error);
@@ -77,29 +110,19 @@ export async function DELETE(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    console.log('Starting POST request');
-    const body = await request.json();
-    console.log('Received body:', body);
-    
-    if (!body.letter) {
-      console.error('No letter in request body');
-      return NextResponse.json({ error: 'No letter provided' }, { status: 400 });
-    }
-    
-    const { letter } = body;
-    console.log('Checking for existing letters');
+    const letter = await request.json();
     
     try {
+      // Get current letters
       const lettersBlob = await getLatestLettersBlob();
+      let data: LettersData = { letters: [] };
       
-      let data: { letters: Letter[] } = { letters: [] };
       if (lettersBlob?.url) {
         const response = await fetch(lettersBlob.url);
-        data = await response.json();
-        console.log('Existing data:', data);
+        data = await response.json() as LettersData;
       }
       
-      const newLetter = {
+      const newLetter: Letter = {
         ...letter,
         id: crypto.randomUUID(),
         createdAt: Date.now()
