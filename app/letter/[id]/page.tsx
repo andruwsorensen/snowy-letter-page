@@ -126,6 +126,7 @@ export default function LetterPage() {
       )}
 
       <Letter 
+        id={letter.id}
         title={letter.title}
         date={letter.date}
         content={letter.content}
