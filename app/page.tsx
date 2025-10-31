@@ -53,7 +53,9 @@ export default function HomePage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {letters.map((letter) => {
-              const preview = letter.content.substring(0, 150) + (letter.content.length > 150 ? "..." : "")
+              const preview = letter.content 
+                ? letter.content.substring(0, 150) + (letter.content.length > 150 ? "..." : "")
+                : "No content available"
 
               return (
                 <Link key={letter.id} href={`/letter/${letter.id}`}>

@@ -110,8 +110,15 @@ export async function DELETE(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const letter = await request.json();
+    const { letter } = await request.json();
     
+    if (!letter || !letter.title || !letter.content || !letter.date) {
+      return NextResponse.json({ 
+        error: 'Invalid letter data',
+        details: 'Missing required fields'
+      }, { status: 400 });
+    }
+
     try {
       // Get current letters
       const lettersBlob = await getLatestLettersBlob();
