@@ -108,6 +108,65 @@ export async function DELETE(request: Request) {
   }
 }
 
+export async function PUT(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const authKey = searchParams.get('key');
+    
+    // Verify Santa's key
+    if (!process.env.SANTA_KEY || authKey !== process.env.SANTA_KEY) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { letter } = await request.json();
+    
+    if (!letter || !letter.id || !letter.title || !letter.content || !letter.date) {
+      return NextResponse.json({ 
+        error: 'Invalid letter data',
+        details: 'Missing required fields'
+      }, { status: 400 });
+    }
+
+    // Get current letters
+    const lettersBlob = await getLatestLettersBlob();
+    if (!lettersBlob?.url) {
+      return NextResponse.json({ error: 'No letters found' }, { status: 404 });
+    }
+
+    const response = await fetch(lettersBlob.url);
+    const data = await response.json() as LettersData;
+
+    // Find and update the letter
+    const letterIndex = data.letters.findIndex((l) => l.id === letter.id);
+    if (letterIndex === -1) {
+      return NextResponse.json({ error: 'Letter not found' }, { status: 404 });
+    }
+
+    // Update the letter while preserving createdAt
+    const updatedLetter = {
+      ...letter,
+      createdAt: data.letters[letterIndex].createdAt
+    };
+    data.letters[letterIndex] = updatedLetter;
+
+    // Save the updated letters
+    const timestamp = Date.now();
+    await put(`letters_${timestamp}.json`, JSON.stringify(data), {
+      access: 'public',
+      contentType: 'application/json',
+      token: STORE_ID
+    });
+
+    return NextResponse.json({ success: true, letter: updatedLetter });
+  } catch (error) {
+    console.error('Failed to update letter:', error);
+    return NextResponse.json({ 
+      error: 'Failed to update letter',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 });
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const { letter } = await request.json();

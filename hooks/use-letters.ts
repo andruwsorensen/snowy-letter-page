@@ -92,11 +92,48 @@ export function useLetters() {
     }
   }
 
+  const editLetter = async (letter: Letter, authKey: string) => {
+    try {
+      const response = await fetch(`/api/letters?key=${authKey}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ letter }),
+      });
+
+      if (!response.ok) {
+        let errorText = '';
+        try {
+          errorText = await response.text();
+          console.error('Server response:', errorText);
+        } catch (e) {
+          errorText = 'Could not read error response';
+        }
+        throw new Error(`Failed to update letter: ${response.status} ${response.statusText}\n${errorText}`);
+      }
+
+      const result = await response.json();
+      if (result.success && result.letter) {
+        // Refetch all letters to ensure we have the latest state
+        await fetchLetters();
+        return result.letter;
+      } else {
+        console.error('Invalid server response:', result);
+        throw new Error('Invalid server response');
+      }
+    } catch (error) {
+      console.error('Error updating letter:', error);
+      throw error;
+    }
+  }
+
   return {
     letters,
     isLoaded,
     addLetter,
     getLetter,
     deleteLetter,
+    editLetter,
   }
 }
