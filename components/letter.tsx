@@ -24,6 +24,11 @@ export default function Letter({ title, date, content }: LetterProps) {
     // Show letter while envelope is still visible
     setTimeout(() => {
       setIsOpen(true)
+      // Focus the letter for keyboard navigation
+      const letterElement = document.querySelector('[role="article"]') as HTMLElement
+      if (letterElement) {
+        letterElement.focus()
+      }
     }, 1800) // Show letter while envelope animation is still playing
     
     // Reset animation state after envelope fades out
@@ -61,7 +66,7 @@ export default function Letter({ title, date, content }: LetterProps) {
           </div>
         </div>
         {isOpen && (
-          <div className="absolute w-full max-w-2xl left-1/2 -translate-x-1/2 top-1/2">
+          <div className="absolute w-[calc(100%-2rem)] sm:w-full max-w-2xl left-1/2 -translate-x-1/2 top-1/2">
             <div className="animate-slide-up overflow-hidden rounded-lg shadow-2xl relative">
               {/* Aged Paper Background */}
               <div className="absolute inset-0 bg-[#FEECE0] opacity-95"></div>
@@ -70,7 +75,7 @@ export default function Letter({ title, date, content }: LetterProps) {
               <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-black/10"></div>
               
               {/* Letter Content with Close Button */}
-              <div className="relative p-8 md:p-12 max-h-[70vh] overflow-y-auto">
+              <div className="relative p-8 md:p-12 max-h-[70vh] overflow-y-auto custom-scrollbar">
                 <button
                   onClick={() => {
                     setIsOpen(false)
