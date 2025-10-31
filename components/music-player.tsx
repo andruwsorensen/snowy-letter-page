@@ -82,7 +82,7 @@ export function MusicPlayer() {
         <>
           <button
             onClick={togglePlay}
-            className="w-12 h-12 md:w-13 md:h-13 ml-2 ft-padding-5px rounded-full bg-accent flex items-center justify-center text-accent-foreground hover:bg-accent/90 transition-colors"
+            className="w-12 h-12 md:w-13 md:h-13 ml-1 ft-padding-5px rounded-full bg-accent flex items-center justify-center text-accent-foreground hover:bg-accent/90 transition-colors"
           >
             {isPlaying ? (
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
