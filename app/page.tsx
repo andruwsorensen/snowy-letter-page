@@ -79,25 +79,7 @@ export default function HomePage() {
                         </div>
                       </div>
 
-                      {/* Small Wax Seal */}
-                      <div className="absolute -bottom-4 -right-4">
-                        <div className="relative w-12 h-12">
-                          <div className="absolute inset-0 bg-accent rounded-full shadow-lg" />
-                          <div className="absolute inset-1 bg-accent/80 rounded-full flex items-center justify-center">
-                            <svg
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="w-5 h-5 text-accent-foreground"
-                            >
-                              <path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z" />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
+
                     </div>
                   </div>
                 </Link>
