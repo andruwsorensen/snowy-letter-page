@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 
-// In a real app, you'd want this to be an environment variable
-const SANTA_KEY = 'hohoho123';
+const SANTA_KEY = process.env.NEXT_PUBLIC_SANTA_KEY;
+
+if (!SANTA_KEY) {
+  console.warn('NEXT_PUBLIC_SANTA_KEY is not set in environment variables');
+}
 
 export function useAuth() {
   const [isAdmin, setIsAdmin] = useState(false);

@@ -71,7 +71,7 @@ export async function DELETE(request: Request) {
     const authKey = searchParams.get('key');
     
     // Verify Santa's key (this should match the key in your use-auth.ts)
-    if (authKey !== 'hohoho123') {
+    if (!process.env.SANTA_KEY || authKey !== process.env.SANTA_KEY) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
