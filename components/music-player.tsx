@@ -59,7 +59,7 @@ export function MusicPlayer() {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 bg-card/80 backdrop-blur-sm rounded-full shadow-lg border border-border p-4 flex items-center gap-3">
+    <div className="fixed bottom-4 md:bottom-8 left-4 md:left-8 z-50 bg-card/80 backdrop-blur-sm rounded-full shadow-lg border border-border flex items-center gap-3 h-14 md:h-16">
       <audio
         ref={audioRef}
         src="/christmas-music.mp3"
@@ -69,7 +69,7 @@ export function MusicPlayer() {
       {showStartButton ? (
         <button
           onClick={startMusic}
-          className="px-6 py-2 rounded-full bg-accent flex items-center gap-2 text-accent-foreground hover:bg-accent/90 transition-colors font-medium"
+          className="h-full px-6 rounded-full bg-accent flex items-center gap-2 text-accent-foreground hover:bg-accent/90 transition-colors font-medium"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 18V5l12-2v13" />
@@ -82,7 +82,7 @@ export function MusicPlayer() {
         <>
           <button
             onClick={togglePlay}
-            className="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-accent-foreground hover:bg-accent/90 transition-colors"
+            className="w-12 h-12 md:w-13 md:h-13 ml-2 ft-padding-5px rounded-full bg-accent flex items-center justify-center text-accent-foreground hover:bg-accent/90 transition-colors"
           >
             {isPlaying ? (
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -95,7 +95,7 @@ export function MusicPlayer() {
               </svg>
             )}
           </button>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 px-3">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent-foreground">
               <path d="M12 3a3 3 0 0 0-3 3v12a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z" />
               <path d="M19 10v2" />
@@ -108,7 +108,7 @@ export function MusicPlayer() {
               step="0.01"
               value={volume}
               onChange={handleVolumeChange}
-              className="w-20 accent-accent"
+              className="w-20 accent-accent h-1"
             />
           </div>
         </>

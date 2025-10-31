@@ -91,7 +91,7 @@ export default function HomePage() {
         {/* Floating Add Button */}
         <Link href="/letter/new">
           <button
-            className="fixed bottom-8 right-8 w-16 h-16 bg-accent hover:bg-accent/90 text-accent-foreground rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-110 duration-300 z-20"
+            className="fixed bottom-4 md:bottom-8 right-4 md:right-8 w-14 h-14 md:w-16 md:h-16 bg-accent hover:bg-accent/90 text-accent-foreground rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-110 duration-300 z-20"
             aria-label="Create new letter"
           >
             <svg
