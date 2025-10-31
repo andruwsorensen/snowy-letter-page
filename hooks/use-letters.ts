@@ -16,12 +16,12 @@ export function useLetters() {
   const [letters, setLetters] = useState<Letter[]>([])
   const [isLoaded, setIsLoaded] = useState(false)
 
-  // Load letters from JSON file
+  // Load letters from API
   useEffect(() => {
-    fetch('/letters.json')
+    fetch('/api/letters')
       .then(response => response.json())
       .then(data => {
-        setLetters(data.letters);
+        setLetters(data.letters || []);
         setIsLoaded(true);
       })
       .catch(error => {
@@ -40,13 +40,25 @@ export function useLetters() {
         body: JSON.stringify({ letter }),
       });
       
+      let errorText = '';
       if (!response.ok) {
-        throw new Error('Failed to save letter');
+        try {
+          errorText = await response.text();
+          console.error('Server response:', errorText);
+        } catch (e) {
+          errorText = 'Could not read error response';
+        }
+        throw new Error(`Failed to save letter: ${response.status} ${response.statusText}\n${errorText}`);
       }
 
-      const { letter: newLetter } = await response.json();
-      setLetters((prev) => [newLetter, ...prev]);
-      return newLetter;
+      const result = await response.json();
+      if (result.success && result.letter) {
+        setLetters((prev) => [result.letter, ...prev]);
+        return result.letter;
+      } else {
+        console.error('Invalid server response:', result);
+        throw new Error('Invalid server response');
+      }
     } catch (error) {
       console.error('Error adding letter:', error);
       throw error;
