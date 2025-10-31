@@ -21,10 +21,15 @@ export default function Letter({ title, date, content }: LetterProps) {
       // Reset the image to force animation restart
       apng.src = apng.src;
     }
-    // Wait for envelope animation to complete before showing letter
+    // Show letter while envelope is still visible
     setTimeout(() => {
       setIsOpen(true)
-    }, 2500)
+    }, 1800) // Show letter while envelope animation is still playing
+    
+    // Reset animation state after envelope fades out
+    setTimeout(() => {
+      setIsAnimating(false)
+    }, 3500)
   }
 
   return (
@@ -32,32 +37,31 @@ export default function Letter({ title, date, content }: LetterProps) {
       <Snowfall />
 
       <div className="relative z-10 w-full max-w-5xl px-4">
-        {!isOpen ? (
-          <div
-            className={`cursor-pointer transition-all duration-300 ${
-              isAnimating ? 'animate-envelope-open' : 'hover:scale-105'
-            }`}
-            onClick={handleEnvelopeClick}
-          >
-            <div className="relative">
-              {/* Static Envelope Image */}
-              <img 
-                src="/static-envelope.png" 
-                alt="Envelope"
-                className={`w-full max-w-3xl mx-auto ${isAnimating ? 'hidden' : 'block'}`}
-              />
-              
-              {/* Animated Envelope Image (APNG) */}
-              <img 
-                id="animated-envelope"
-                src="/animated-envelope.png"
-                alt="Envelope opening"
-                className={`w-full max-w-3xl mx-auto ${!isAnimating ? 'hidden' : 'block'}`}
-              />
-            </div>
+        <div
+          className={`cursor-pointer transition-all duration-300 ${
+            isAnimating ? 'animate-envelope-open' : 'hover:scale-105'
+          } ${isOpen ? 'opacity-0 transition-opacity duration-1000' : ''}`}
+          onClick={handleEnvelopeClick}
+        >
+          <div className="relative">
+            {/* Static Envelope Image */}
+            <img 
+              src="/static-envelope.png" 
+              alt="Envelope"
+              className={`w-full max-w-3xl mx-auto ${isAnimating ? 'hidden' : 'block'}`}
+            />
+            
+            {/* Animated Envelope Image (APNG) */}
+            <img 
+              id="animated-envelope"
+              src="/animated-envelope.png"
+              alt="Envelope opening"
+              className={`w-full max-w-3xl mx-auto ${!isAnimating ? 'hidden' : 'block'}`}
+            />
           </div>
-        ) : (
-          <div className="relative w-full max-w-2xl mx-auto">
+        </div>
+        {isOpen && (
+          <div className="absolute w-full max-w-2xl left-1/2 -translate-x-1/2 top-1/2">
             <div className="animate-slide-up bg-card rounded-lg shadow-2xl border-2 border-border overflow-hidden">
               {/* Letter Header */}
               <div className="bg-secondary/50 p-6 md:p-8 border-b border-border">

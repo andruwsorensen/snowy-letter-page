@@ -180,11 +180,11 @@
 
 @keyframes slide-up {
   0% {
-    transform: translateY(100%);
+    transform: translateY(30%);
     opacity: 0;
   }
   100% {
-    transform: translateY(0);
+    transform: translateY(-50%); /* Move up to overlap with the envelope */
     opacity: 1;
   }
 }
